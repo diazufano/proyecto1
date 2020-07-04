@@ -1,31 +1,45 @@
 import os
-import requests
 
-from flask import Flask, session
-from flask_session import Session
+from flask import Flask, render_template, request
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 app = Flask(__name__)
-conexion="postgresql://postgres:11887010@localhost/edx50"
 
-# Configure session to use filesystem
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
+app.run
 
-# Set up database
-engine = create_engine(conexion)
+engine = create_engine('postgresql://postgres:11887010@localhost/edx50')
 db = scoped_session(sessionmaker(bind=engine))
 
-
-@app.route("/")
+# Route for handling the login page logic
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    res = requests.get (" https://www.goodreads.com/book/review_counts.json", params =
-    {" key ":"dZGnlkLsiELtLnSrHQThzA", "isbns": "0743269268"})
-    print (res.text)
-
-if __name__ == "__index__":
-    index()
-
+    msg = None
+    if request.method == 'POST':
+        usrname =request.values.get("username")
+        usrpass =request.values.get("password")
+        button_click= request.values.get('sub_button')
+        if button_click == 'Login':
+            user = db.execute("SELECT name, password FROM users WHERE  password= :inpass",
+                    {"inpass": usrpass}).fetchone()
+            if user is None:
+                error='El Usuario no esta registrado'
+                return render_template('error.html', message=error) 
+            else:
+                msg='el usuario esta en la BBDD.'
+                return render_template('exito.html', message=msg)            
+        if button_click == 'Register':
+            user = db.execute("SELECT name, password FROM users WHERE  password= :inpass",
+                    {"inpass": usrpass}).fetchone()
+            if user is None:
+                db.execute("INSERT INTO users (name, password) VALUES (:name, :password)",
+                {"name": usrname, "password": usrpass})
+                db.commit()
+                msg='se ha registrado correctamente.'
+                return render_template('exito.html', message=msg)
+            else:
+                msg='el usuario esta en la BBDD.'
+                return render_template('exito.html', message=msg)  
+        return render_template('index.html') 
+    return render_template('index.html')    
 app.run()
