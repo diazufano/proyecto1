@@ -17,9 +17,13 @@
             <input type="submit" name="sub_button" value="Login">
             <input type="submit" name="sub_button" value="Register">
             </form>
-                {% if error %}
-                    <p class="error"><strong>Error:</strong> {{ error }}
+                {% if message %}
+                    <p class="message"><strong>{{ message}}</strong>
                 {% endif %}
         </div>
     </form>
+    {% if user %}
+       <h3>{{user.name}}</h3>
+    {% endif %}
+    
 {% endblock %}

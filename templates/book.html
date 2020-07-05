@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Book
+{% endblock %}
+
+{% block body %}
+    <h1>Book details</h1>
+        {% if book %}
+            <ul>
+                <li>Title: {{ book.title }}</li>
+                <li>Autor: {{ book.author }}</li>
+                <li>Year: {{ book.anyo}}</li>
+            </ul>
+        {% endif %}
+        {% if data %}
+            {% for book in data %}
+                <ul>
+                    <li>ISBN: {{ book.["books"]["isbn"] }}</li>
+                    <li>Total Ratings: {{ book.["books"]["work_ratings_count"] }}</li>
+                    <li>Average Rating: {{ book.["books"]["average_rating"]}}</li>
+                </ul>
+            {% endfor %}
+        {% endif %}
+
+{% endblock %}

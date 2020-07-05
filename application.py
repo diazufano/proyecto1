@@ -1,4 +1,7 @@
 import os
+import requests
+#import json
+
 
 from flask import Flask, render_template, request
 from sqlalchemy import create_engine
@@ -46,10 +49,6 @@ def index():
 
 @app.route('/seek', methods=['GET', 'POST'])
 def seek():
-    button_click= request.values.get('logout')
-    if button_click == 'logout':
-            user=None
-            return render_template('index.html', user=user) 
     seek = request.values.get("seek")
     if seek == "":
         msg= 'You must enter a search model.'
@@ -68,5 +67,20 @@ def seek():
             msg='There is no result for that search'
             return render_template('seek.html', message=msg) 
         else:                      
-            return render_template('seek.html', lisbn=lisbn, ltitle=ltitle, lauthor=lauthor)        
+            return render_template('seek.html', lisbn=lisbn, ltitle=ltitle, lauthor=lauthor)  
+
+@app.route('/book', methods=['GET', 'POST'])
+def book():
+    book_id = request.values.get("book_id")
+    book = db.execute("SELECT * from goodbooks WHERE id=:book_id",
+                    {"book_id": book_id}).fetchone()
+    res = requests.get (" https://www.goodreads.com/book/review_counts.json", params =
+    {" key ":"dZGnlkLsiELtLnSrHQThzA", "isbns":book.isbn})
+    data = res.json()
+    if book is None:
+        msg = 'Book not exist in DataBase'
+        return render_template('error.html', message=msg) 
+    else:                     
+        return render_template('book.html', book=book, data=data) 
+
 app.run()
