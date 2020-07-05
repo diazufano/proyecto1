@@ -13,6 +13,7 @@
             <input type="text" placeholder="ISBN, title, author" name="seek" value="{{
                 request.form.seek }}">
             <input type="submit" name="button" value="Seek">
+            <input type="submit" name="logout" value="logout">
             </form>
                 {% if message %}
                 <h2>{{message}}</h2>
@@ -21,7 +22,11 @@
                     <h2>Your seek</h2>
                         <ul>
                             {% for book in lisbn %}
-                                <li>Number: {{ book.id }} Book: {{ book.title }}, Author: {{ book.author }}, Year:{{ book.anyo }}</li>
+                                <li>
+                                    <a href="{{ url_for('book', book_id=book.id) }}">
+                                         {{ book.title }} by {{ book.author }}
+                                    </a>
+                                </li>
                             {% else %}
                                 <li>No books.</li>
                             {% endfor %}
@@ -31,7 +36,11 @@
                     <h2>Your seek</h2>
                         <ul>
                             {% for book in ltitle %}
-                                <li>Number: {{ book.id }} Book: {{ book.title }}, Author: {{ book.author }}, Year:{{ book.anyo }}</li>
+                                <li>
+                                    <a href="{{ url_for('book', book_id=book.id) }}">
+                                         {{ book.title }} by {{ book.author }}
+                                    </a>
+                                </li>
                             {% else %}
                                 <li>No books.</li>
                             {% endfor %}
@@ -41,14 +50,16 @@
                     <h2>Your seek</h2>
                         <ul>
                             {% for book in lauthor %}
-                                <li>Number: {{ book.id }} Book: {{ book.title }}, Author: {{ book.author }}, Year:{{ book.anyo }}</li>
+                               <li>
+                                    <a href="{{ url_for('book', book_id=book.id) }}">
+                                         {{ book.title }} by {{ book.author }}
+                                    </a>
+                                </li>
                             {% else %}
                                 <li>No books.</li>
                             {% endfor %}
                         </ul>
-                {% endif %}
-        </div>
+                {% endif %}        
+        </div>   
     </form>
-    <br>
-    <input type="submit" name="logout" value="logout">
 {% endblock %}

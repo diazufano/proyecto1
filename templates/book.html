@@ -14,13 +14,21 @@
             </ul>
         {% endif %}
         {% if data %}
-            {% for book in data %}
+            {% for info in data["books"] %}
                 <ul>
-                    <li>ISBN: {{ book.["books"]["isbn"] }}</li>
-                    <li>Total Ratings: {{ book.["books"]["work_ratings_count"] }}</li>
-                    <li>Average Rating: {{ book.["books"]["average_rating"]}}</li>
+                    <li>ISBN: {{info["isbn"]}}</li>
+                    <li>Total Ratings: {{ info["work_ratings_count"] }}</li>
+                    <li>Average Rating: {{ info["average_rating"]}}</li>
                 </ul>
             {% endfor %}
         {% endif %}
-
+        <h2> Your rating </h2>
+        <form action="{{ url_for('book') }}" method="post"> 
+            <div class="container">
+            <br>
+                <form action="" method="post">
+                <input type="submit" name="button" value="review">
+                </form>
+            </div>    
+        </form>
 {% endblock %}

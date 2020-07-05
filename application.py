@@ -71,6 +71,13 @@ def seek():
 
 @app.route('/book', methods=['GET', 'POST'])
 def book():
+    if request.method == 'POST':
+        button_click= request.values.get('button')
+        if button_click == 'review': 
+            return render_template('review.html') 
+        else:
+            msg = 'Button rating no action.'
+            return render_template('error.html', message=msg) 
     book_id = request.values.get("book_id")
     book = db.execute("SELECT * from goodbooks WHERE id=:book_id",
                     {"book_id": book_id}).fetchone()
@@ -81,6 +88,6 @@ def book():
         msg = 'Book not exist in DataBase'
         return render_template('error.html', message=msg) 
     else:                     
-        return render_template('book.html', book=book, data=data) 
-
+        return render_template('book.html', book=book, data=data)
+    #coments of books there     
 app.run()
