@@ -1,19 +1,18 @@
 import os
 import requests
 
-
-
 from flask import Flask, render_template, request, session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from flask_session import Session
+from flask import  jsonify     
 
 app = Flask(__name__)
 app.secret_key = '11887010'
 
 app.run
 
-engine = create_engine('postgresql://postgres:11887010@localhost/edx50')
+engine = create_engine('postgres://dqjmeafvjcfgzi:0f13121def0e4adb5c9a2ccd2db8d86704ea301a74458270a7aa2e5742c0f2b2@ec2-54-247-89-181.eu-west-1.compute.amazonaws.com:5432/d4hr1nh11gu72o')
 db = scoped_session(sessionmaker(bind=engine))
 
 # Route for handling the login page logic
@@ -135,6 +134,27 @@ def review():
         return render_template('review.html')            
     else:
         msg = 'No hace POST review.'
-        return render_template('error.html', message=msg)            
+        return render_template('error.html', message=msg) 
+
+# ... other imports, set up code, and routes ...
+@app.route("/api/<int:book_isbn>", methods=['GET', 'POST'])
+def book_api(book_isbn):
+
+#Return details about a single book."""
+# Make sure book exists.
+    myisbn=str(book_isbn)
+    book = db.execute("SELECT * from goodbooks WHERE isbn=:book_isbn",
+            {"book_isbn": "0142501085"}).fetchone()
+    if book is None:
+        return jsonify({"error": "Invalid book_isbn"}), 422
+    else:
+        return jsonify({
+            "title": book.title,
+            "author": book.author,
+            "year": book.anyo,
+            "isbn": book.isbn,
+            "review_count": 28,
+            "average_score": 5.0
+        })
 
 app.run()
