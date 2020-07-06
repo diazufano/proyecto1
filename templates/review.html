@@ -7,13 +7,13 @@
 {% block body %}
     <h1>Review</h1>
     <h2>Please write your opinion about book</h2>
-    <form action="{{ url_for('book') }}" method="post"> 
+    <form action="{{ url_for('review') }}" method="post"> 
             <div class="container">
             <br>
                 <form action="" method="post">
                     <textarea rows = "5" cols = "30" name = "opinion" placeholder="Your opinion here" value="{{
-                        request.form.opinion }}">
-                    </textarea><br>
+                        request.form.opinion }}"></textarea>
+                    <br>
                     <br>
                         <select name="rating">
                             <option value="1">1</option>
@@ -24,6 +24,7 @@
                         </select>
                         <br>
                     <input type="submit" name="button" value="Send">
+                    <input type="submit" name="logout" value="logout">
                 </form>
             </div>
     </form>                
